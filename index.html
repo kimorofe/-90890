@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شحن شداد ببجي موبايل</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --primary-hover: #2980b9;
+            --secondary-color: #2c3e50;
+            --light-gray: #f5f5f5;
+            --border-color: #e1e5eb;
+            --success-color: #2ecc71;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            direction: rtl;
+            padding: 0;
+        }
+        
+        .form-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 0;
+            box-shadow: none;
+            width: 100%;
+            height: 100vh;
+            max-width: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-container::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, #3498db, #2ecc71);
+            z-index: 10;
+        }
+        
+        .form-container h2 {
+            color: var(--secondary-color);
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.6rem;
+            position: relative;
+            padding-bottom: 12px;
+            margin-top: 10px;
+        }
+        
+        .form-container h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 50%;
+            transform: translateX(50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--primary-color);
+            border-radius: 3px;
+        }
+        
+        .form-group {
+            margin-bottom: 18px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--secondary-color);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        
+        .form-group input, 
+        .form-group select {
+            width: 100%;
+            padding: 14px 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background-color: #f9f9f9;
+        }
+        
+        .form-group input:focus, 
+        .form-group select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(to right, var(--primary-color), var(--primary-hover));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
+        }
+        
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s;
+            padding: 15px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 16px;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            animation: slideUp 0.4s;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-content p {
+            margin: 0 0 25px;
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+            line-height: 1.6;
+        }
+        
+        .modal-content .icon-success {
+            font-size: 3rem;
+            color: var(--success-color);
+            margin-bottom: 15px;
+        }
+        
+        .btn-close {
+            padding: 12px 30px;
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        
+        .btn-close:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+        
+        .btn-close:active {
+            transform: translateY(0);
+        }
+        
+        .payment-instructions {
+            display: none;
+            background-color: #f8f9fa;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: right;
+            animation: fadeIn 0.5s;
+        }
+        
+        .payment-instructions strong {
+            color: var(--danger-color);
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+        
+        .payment-instructions span {
+            display: inline-block;
+            background-color: #f1f1f1;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            direction: ltr;
+        }
+        
+        .file-upload {
+            margin-bottom: 20px;
+        }
+        
+        .file-upload-label {
+            display: block;
+            padding: 14px;
+            background: linear-gradient(to right, var(--primary-color), var(--primary-hover));
+            color: white;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+        }
+        
+        .file-upload-label:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
+        }
+        
+        .file-upload-label:active {
+            transform: translateY(0);
+        }
+        
+        .file-upload-input {
+            display: none;
+        }
+        
+        .preview-image {
+            max-width: 100%;
+            max-height: 200px;
+            margin-top: 15px;
+            border-radius: 8px;
+            display: none;
+            border: 2px dashed var(--border-color);
+            padding: 5px;
+            object-fit: contain;
+        }
+        
+        .confirmation-modal {
+            display: none;
+            position: fixed;
+            z-index: 101;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s;
+            padding: 15px;
+        }
+        
+        .confirmation-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            animation: slideUp 0.4s;
+            text-align: right;
+            overflow-y: auto;
+            max-height: 90vh;
+        }
+        
+        .confirmation-content h3 {
+            color: var(--secondary-color);
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+        
+        .confirmation-details {
+            margin-bottom: 25px;
+        }
+        
+        .confirmation-row {
+            display: flex;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed #eee;
+            flex-direction: column;
+        }
+        
+        .confirmation-label {
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+        }
+        
+        .confirmation-value {
+            color: #555;
+            word-break: break-word;
+            font-size: 0.9rem;
+        }
+        
+        .confirmation-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .confirmation-buttons button {
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+        
+        .btn-confirm {
+            background: linear-gradient(to right, var(--success-color), #27ae60);
+            color: white;
+            box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);
+        }
+        
+        .btn-confirm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(46, 204, 113, 0.4);
+        }
+        
+        .btn-edit {
+            background: linear-gradient(to right, var(--warning-color), #e67e22);
+            color: white;
+            box-shadow: 0 4px 10px rgba(243, 156, 18, 0.3);
+        }
+        
+        .btn-edit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(243, 156, 18, 0.4);
+        }
+        
+        .confirmation-image {
+            max-width: 100%;
+            max-height: 150px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+        }
+        
+        .price-badge {
+            display: inline-block;
+            background: linear-gradient(to right, #ff9a00, #ff5e00);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-right: 5px;
+            font-weight: bold;
+        }
+        
+        /* تصميم جديد لأزرار طرق الدفع */
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .payment-method-btn {
+            padding: 15px 10px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-weight: 600;
+            color: var(--secondary-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80px;
+        }
+        
+        .payment-method-btn:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .payment-method-btn.active {
+            border-color: var(--primary-color);
+            background-color: rgba(52, 152, 219, 0.1);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        .payment-method-icon {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            color: #555;
+        }
+        
+        /* تصميم جديد لزر النسخ */
+        .copy-container {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 10px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .payment-number {
+            flex: 1;
+            font-family: monospace;
+            font-size: 1rem;
+            padding: 8px 12px;
+            background-color: white;
+            border-radius: 6px;
+            direction: ltr;
+            text-align: center;
+            border: 1px solid #dee2e6;
+        }
+        
+        .btn-copy {
+            background: linear-gradient(to right, var(--primary-color), var(--primary-hover));
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 15px;
+            margin-right: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 0.9rem;
+            min-width: 80px;
+        }
+        
+        .btn-copy:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .btn-copy:active {
+            transform: translateY(0);
+        }
+        
+        .btn-copy i {
+            margin-left: 5px;
+        }
+        
+        .copied-message {
+            display: none;
+            background-color: var(--success-color);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            text-align: center;
+            animation: fadeInOut 2s ease-in-out;
+        }
+        
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        
+        @media (min-width: 768px) {
+            .form-container {
+                padding: 30px;
+            }
+            
+            .confirmation-row {
+                flex-direction: row;
+            }
+            
+            .confirmation-label {
+                min-width: 120px;
+                margin-left: 15px;
+                margin-bottom: 0;
+            }
+            
+            .confirmation-buttons {
+                flex-direction: row;
+            }
+            
+            .payment-methods {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .form-container h2 {
+                font-size: 1.4rem;
+            }
+            
+            .form-group input, 
+            .form-group select {
+                padding: 12px;
+            }
+            
+            .btn-submit {
+                padding: 14px;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+            
+            .confirmation-content {
+                padding: 15px;
+            }
+            
+            .payment-methods {
+                grid-template-columns: 1fr;
+            }
+            
+            .copy-container {
+                flex-direction: column;
+            }
+            
+            .payment-number {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            .btn-copy {
+                margin-right: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">      
+        <h2>شحن شداد ببجي موبايل</h2>
+        <form onsubmit="handleSubmit(event)">
+            <div class="form-group">
+                <label for="playerName">اسم اللاعب في اللعبة</label>
+                <input type="text" id="playerName" required placeholder="أدخل اسم اللاعب كما يظهر في اللعبة">
+            </div>
+            <div class="form-group">
+                <label for="playerId">رقم ID الخاص باللاعب</label>
+                <input type="number" id="playerId" required placeholder="اكتب الرقم التعريفي للاعب">
+            </div>
+            <div class="form-group">
+                <label for="whatsappNumber">رقم الهاتف (واتساب)</label>
+                <input type="number" id="whatsappNumber" required placeholder="أدخل رقم الواتساب للتواصل">
+            </div>
+            <div class="form-group">
+                <label for="ucOption">اختر الشداد والسعر <span class="price-badge">جنيه مصري</span></label>
+                <select id="ucOption" required>
+                    <option value="" disabled selected>-- اختر عدد الشداد --</option>
+                    <option value="30 شداد - 25 جنيه">30 شداد - 25 جنيه</option>
+                    <option value="60 شداد - 45 جنيه">60 شداد - 45 جنيه</option>
+                    <option value="325 شداد - 220 جنيه">325 شداد - 220 جنيه</option>
+                    <option value="660 شداد - 435 جنيه">660 شداد - 435 جنيه</option>
+                    <option value="1800 شداد - 1070 جنيه">1800 شداد - 1070 جنيه</option>
+                    <option value="3850 شداد - 2130 جنيه">3850 شداد - 2130 جنيه</option>
+                    <option value="8100 شداد - 4250 جنيه">8100 شداد - 4250 جنيه</option>
+                    <option value="16200 شداد - 8600 جنيه">16200 شداد - 8600 جنيه</option>
+                    <option value="24300 شداد - 13250 جنيه">24300 شداد - 13250 جنيه</option>
+                    <option value="32400 شداد - 17370 جنيه">32400 شداد - 17370 جنيه</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>اختر طريقة الدفع</label>
+                <div class="payment-methods">
+                    <div class="payment-method-btn" data-method="فودافون كاش" onclick="selectPaymentMethod(this)">
+                        <div class="payment-method-icon"><i class="fas fa-mobile-alt"></i></div>
+                        <div>فودافون كاش</div>
+                    </div>
+                    <div class="payment-method-btn" data-method="انستا باي" onclick="selectPaymentMethod(this)">
+                        <div class="payment-method-icon"><i class="fas fa-credit-card"></i></div>
+                        <div>انستا باي</div>
+                    </div>
+                    <div class="payment-method-btn" data-method="باي بال" onclick="selectPaymentMethod(this)">
+                        <div class="payment-method-icon"><i class="fab fa-paypal"></i></div>
+                        <div>باي بال</div>
+                    </div>
+                </div>
+                <input type="hidden" id="paymentMethod" required>
+            </div>
+
+            <div id="vodafoneInstructions" class="payment-instructions">
+                <strong>تعليمات الدفع عبر فودافون كاش:</strong>
+                <div class="copy-container">
+                    <span class="payment-number">01069627410</span>
+                    <button type="button" class="btn-copy" onclick="copyToClipboard('01069627410')">
+                        <i class="far fa-copy"></i> نسخ
+                    </button>
+                </div>
+                <div id="vodafoneCopied" class="copied-message">تم نسخ الرقم بنجاح!</div>
+                <p style="margin-top: 10px; color: #666; font-size: 0.85rem;">يرجى إرسال المبلغ المطلوب ثم رفع صورة إثبات التحويل</p>
+            </div>
+
+            <div id="instaPayInstructions" class="payment-instructions">
+                <strong>تعليمات الدفع عبر انستا باي:</strong>
+                <div class="copy-container">
+                    <span class="payment-number">01090470326</span>
+                    <button type="button" class="btn-copy" onclick="copyToClipboard('01090470326')">
+                        <i class="far fa-copy"></i> نسخ
+                    </button>
+                </div>
+                <div id="instaPayCopied" class="copied-message">تم نسخ الرقم بنجاح!</div>
+                <p style="margin-top: 10px; color: #666; font-size: 0.85rem;">يرجى إرسال المبلغ المطلوب ثم رفع صورة إثبات التحويل</p>
+            </div>
+
+            <div id="paypalInstructions" class="payment-instructions">
+                <strong>تعليمات الدفع عبر باي بال:</strong>
+                <div class="copy-container">
+                    <span class="payment-number">dreamshopping.app@gmail.com</span>
+                    <button type="button" class="btn-copy" onclick="copyToClipboard('dreamshopping.app@gmail.com')">
+                        <i class="far fa-copy"></i> نسخ
+                    </button>
+                </div>
+                <div id="paypalCopied" class="copied-message">تم نسخ البريد الإلكتروني بنجاح!</div>
+                <p style="margin-top: 10px; color: #666; font-size: 0.85rem;">يرجى إرسال المبلغ المطلوب ثم رفع صورة إثبات التحويل</p>
+            </div>
+
+            <div class="file-upload">
+                <label for="paymentProof" class="file-upload-label">
+                    <i class="fas fa-camera"></i> رفع صورة إثبات الدفع
+                </label>
+                <input type="file" id="paymentProof" class="file-upload-input" accept="image/*" required>
+                <img id="previewImage" class="preview-image" alt="معاينة صورة الإثبات">
+            </div>
+
+            <button type="submit" class="btn-submit">
+                <i class="fas fa-bolt"></i> شحن الان
+            </button>
+        </form>
+    </div>
+
+    <!-- نموذج تأكيد الطلب -->
+    <div id="confirmationModal" class="confirmation-modal">
+        <div class="confirmation-content">
+            <h3>تأكيد طلب الشحن</h3>
+            <div class="confirmation-details">
+                <div class="confirmation-row">
+                    <div class="confirmation-label">اسم اللاعب:</div>
+                    <div class="confirmation-value" id="confirmPlayerName"></div>
+                </div>
+                <div class="confirmation-row">
+                    <div class="confirmation-label">رقم ID:</div>
+                    <div class="confirmation-value" id="confirmPlayerId"></div>
+                </div>
+                <div class="confirmation-row">
+                    <div class="confirmation-label">رقم الواتساب:</div>
+                    <div class="confirmation-value" id="confirmWhatsapp"></div>
+                </div>
+                <div class="confirmation-row">
+                    <div class="confirmation-label">الباقة المختارة:</div>
+                    <div class="confirmation-value" id="confirmUcOption"></div>
+                </div>
+                <div class="confirmation-row">
+                    <div class="confirmation-label">طريقة الدفع:</div>
+                    <div class="confirmation-value" id="confirmPaymentMethod"></div>
+                </div>
+                <div class="confirmation-row">
+                    <div class="confirmation-label">إثبات الدفع:</div>
+                    <div class="confirmation-value">
+                        <img id="confirmPaymentProof" class="confirmation-image" alt="إثبات الدفع">
+                    </div>
+                </div>
+            </div>
+            <div class="confirmation-buttons">
+                <button class="btn-confirm" onclick="sendData()">
+                    <i class="fas fa-check"></i> تأكيد الإرسال
+                </button>
+                <button class="btn-edit" onclick="closeConfirmation()">
+                    <i class="fas fa-edit"></i> تعديل البيانات
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- نموذج نجاح الإرسال -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="icon-success">✓</div>
+            <p>تم إرسال طلبك بنجاح! سوف يتم التنفيذ خلال دقائق والتواصل معك خلال ساعة لتأكيد الشحن</p>
+            <button class="btn-close" onclick="closeModal()">
+                <i class="fas fa-times"></i> إغلاق
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let formData = {};
+        
+        // تهيئة معاينة الصورة
+        document.getElementById('paymentProof').addEventListener('change', function(e) {
+            const preview = document.getElementById('previewImage');
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+
+        // اختيار طريقة الدفع
+        function selectPaymentMethod(element) {
+            // إزالة النشط من جميع الأزرار
+            document.querySelectorAll('.payment-method-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // إضافة النشط للزر المحدد
+            element.classList.add('active');
+            
+            // تعيين القيمة في الحقل المخفي
+            const method = element.getAttribute('data-method');
+            document.getElementById('paymentMethod').value = method;
+            
+            // عرض تعليمات الدفع المناسبة
+            showPaymentInstructions(method);
+        }
+        
+        // عرض تعليمات الدفع حسب الطريقة المختارة
+        function showPaymentInstructions(method) {
+            document.getElementById('vodafoneInstructions').style.display = 'none';
+            document.getElementById('instaPayInstructions').style.display = 'none';
+            document.getElementById('paypalInstructions').style.display = 'none';
+            
+            if (method === 'فودافون كاش') {
+                document.getElementById('vodafoneInstructions').style.display = 'block';
+            } else if (method === 'انستا باي') {
+                document.getElementById('instaPayInstructions').style.display = 'block';
+            } else if (method === 'باي بال') {
+                document.getElementById('paypalInstructions').style.display = 'block';
+            }
+        }
+
+        // نسخ النص إلى الحافظة
+        function copyToClipboard(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textArea);
+            
+            // إظهار رسالة التأكيد
+            let messageId;
+            if (text === '01069627410') {
+                messageId = 'vodafoneCopied';
+            } else if (text === '01090470326') {
+                messageId = 'instaPayCopied';
+            } else if (text === 'dreamshopping.app@gmail.com') {
+                messageId = 'paypalCopied';
+            }
+            
+            const message = document.getElementById(messageId);
+            message.style.display = 'block';
+            
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 2000);
+        }
+
+        // تنسيق رقم الهاتف لرابط واتساب
+        function formatPhoneNumber(phone) {
+            let cleaned = phone.toString().replace(/\D/g, '');
+            
+            if (cleaned.startsWith('0')) {
+                cleaned = '20' + cleaned.substring(1);
+            } else if (!cleaned.startsWith('20') && cleaned.length === 10) {
+                cleaned = '20' + cleaned;
+            }
+            
+            return cleaned;
+        }
+
+        // إرسال الطلب
+        function handleSubmit(event) {
+            event.preventDefault();
+            
+            const paymentMethod = document.getElementById('paymentMethod').value;
+            if (!paymentMethod) {
+                alert('الرجاء اختيار طريقة الدفع');
+                return;
+            }
+            
+            const paymentProofFile = document.getElementById('paymentProof').files[0];
+            if (!paymentProofFile) {
+                alert('الرجاء رفع صورة إثبات الدفع');
+                return;
+            }
+            
+            formData = {
+                playerName: document.getElementById('playerName').value,
+                playerId: document.getElementById('playerId').value,
+                whatsappNumber: document.getElementById('whatsappNumber').value,
+                ucOption: document.getElementById('ucOption').value,
+                paymentMethod: paymentMethod,
+                paymentProof: paymentProofFile
+            };
+
+            // عرض بيانات التأكيد
+            showConfirmation(formData);
+        }
+        
+        // عرض نموذج التأكيد
+        function showConfirmation(data) {
+            document.getElementById('confirmPlayerName').textContent = data.playerName;
+            document.getElementById('confirmPlayerId').textContent = data.playerId;
+            document.getElementById('confirmWhatsapp').textContent = data.whatsappNumber;
+            document.getElementById('confirmUcOption').textContent = data.ucOption;
+            document.getElementById('confirmPaymentMethod').textContent = data.paymentMethod;
+            
+            // عرض صورة الإثبات
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('confirmPaymentProof').src = e.target.result;
+            };
+            reader.readAsDataURL(data.paymentProof);
+            
+            // إظهار نموذج التأكيد
+            document.getElementById('confirmationModal').style.display = 'flex';
+        }
+        
+        // إغلاق نموذج التأكيد
+        function closeConfirmation() {
+            document.getElementById('confirmationModal').style.display = 'none';
+        }
+        
+        // إرسال البيانات بعد التأكيد
+        async function sendData() {
+            try {
+                const telegramToken = "7733737795:AAEiAQzZsoHoy09yRcSbtYRMbvdRNxFC_Bs";
+                const chatId = "6354198599";
+                
+                const formattedNumber = formatPhoneNumber(formData.whatsappNumber);
+                const whatsappLink = `https://wa.me/${formattedNumber}`;
+                
+                // نص الرسالة مع إمكانية نسخ البيانات بسهولة
+                const messageText = `
+📌 *طلب شحن شداد ببجي جديد* 📌
+
+👤 *معلومات اللاعب:*
+- الاسم: \`${formData.playerName}\`
+- الرقم التعريفي: \`${formData.playerId}\`
+- رقم الهاتف: \`${formData.whatsappNumber}\`
+- رابط واتساب: [اضغط هنا](${whatsappLink})
+
+💰 *تفاصيل الطلب:*
+- الباقة: ${formData.ucOption}
+- طريقة الدفع: ${formData.paymentMethod}
+
+📎 *تم رفع إثبات الدفع مع هذه الرسالة*
+
+⏳ *سيتم التنفيذ خلال دقائق*
+                `;
+                
+                const form = new FormData();
+                form.append('chat_id', chatId);
+                form.append('caption', messageText);
+                form.append('photo', formData.paymentProof);
+                form.append('parse_mode', 'Markdown');
+                
+                await fetch(`https://api.telegram.org/bot${telegramToken}/sendPhoto`, {
+                    method: "POST",
+                    body: form
+                });
+                
+                // إغلاق نموذج التأكيد وإظهار نموذج النجاح
+                closeConfirmation();
+                document.getElementById('modal').style.display = 'flex';
+                
+            } catch (error) {
+                console.error('Error:', error);
+                alert('حدث خطأ أثناء إرسال الطلب، الرجاء المحاولة مرة أخرى');
+                closeConfirmation();
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+            document.querySelector('form').reset();
+            document.getElementById('previewImage').style.display = 'none';
+            document.querySelectorAll('.payment-instructions').forEach(el => {
+                el.style.display = 'none';
+            });
+            document.querySelectorAll('.payment-method-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById('paymentMethod').value = '';
+        }
+    </script>
+</body>
+</html>
